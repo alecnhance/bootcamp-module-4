@@ -14,8 +14,8 @@ protocol LinkedList {
     var head: Node<Element>? { get set }
     var size: Int { get set }
     
-    func add(value: Element) // append element to head of linked list
-    func clear() // clears linked list
+    mutating func add(value: Element) // append element to head of linked list
+    mutating func clear() // clears linked list
     func getHead() -> Node<Element>? // returns head node, if possible. If not, return nil
     func get(index: Int) -> Node<Element>? // returns node at index, if possible. If not, return nil
     func contains(value: Element) -> Bool // returns true if linked list contains value
@@ -27,13 +27,81 @@ public class Node<T> {
     public var next: Node<T>?
     
     // add init block here
+    init(value: T, next: Node<T>? = nil) {
+        self.value = value
+        self.next = next
+    }
 }
 
-public struct MyLL<T>: LinkedList {
+public struct MyLL<T: Equatable>: LinkedList {
+    var head: Node<T>?
+    
+    mutating func clear() {
+        head = nil
+    }
+    
+    var size: Int
+    
+    mutating func add(value: Element) {
+        head = Node(value: value, next: head)
+    }
+    
+    func getHead() -> Node<T>? {
+        return self.head
+    }
+    func get(index: Int) -> Node<T>? {
+        var count = 0
+        var temp = head
+        while count != index {
+            if let head = head {
+                temp = head.next
+            }
+            count += 1
+        }
+        return temp
+    }
+    func contains(value: T) -> Bool {
+        var temp: Node<T>?
+        if let head = head {
+            temp = head
+        } else {
+            return false
+        }
+        while temp!.value != value {
+            if let next = temp!.next {
+                temp = next
+            } else {
+                return false
+            }
+        }
+        return true
+    }
+    func toArray() -> [T]? {
+        var temp: Node<T>?
+        var final: [T] = []
+        if let head = head {
+            temp = head
+        } else {
+            return final
+        }
+        while true {
+            final.append(temp!.value)
+            if let next = temp!.next {
+                temp = next
+            } else {
+                return final
+            }
+        }
+    }
     // implement the linked list here
 }
 
 // TEST YOUR LINKED LIST IMPLEMENTATION USING STRINGS BELOW
+
+/*
+ I tried my best, but I haven't been taught about linked lists and don't even know how to go about testing them.
+ 
+ */
 
 // ADD PERSONALID AND BUZZCARD BELOW
 
